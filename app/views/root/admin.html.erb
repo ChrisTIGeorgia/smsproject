@@ -1,0 +1,14 @@
+Sabaaso
+
+<%= form_tag({:action => "submitMessage"}) do %>
+  <%= label_tag(:phone_number, "Number") %>
+  <%= text_field_tag(:phone_number) %>
+  <%= label_tag(:message, "Message") %>
+  <%= text_field_tag(:message) %>
+  <%= submit_tag("Add Test Message") %>
+<% end %>
+
+<%= button_to "CLEAR DATA", {:action => "deleteAll"}%>
+
+<%= button_to "START SHOW", {:action => "startShow"}%>
+<%= button_to "STOP SHOW", {:action => "stopShow"}%>

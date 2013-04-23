@@ -1,0 +1,6 @@
+live = <%= @live%>
+<%if @live == true%>
+	currentMessage = "<%if @message%> <%= @message.body%> <%else%>TXT ME<%end%>";
+	lastID = <%if @message%><%=@message.id%><%else%>-1<%end%>;
+	var image_path = "<%=@current_slide_path%>";
+<%end%>

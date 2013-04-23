@@ -1,0 +1,26 @@
+// Place all the styles related to the root controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+#quoteText
+{
+position:absolute;
+left:525px;
+top:160px;
+z-index: 700;
+font-family:"Times New Roman";
+font-size:23px;
+border-style:none;
+disabled:true;
+outline:none;
+resize:none;
+}
+
+#notLiveImg
+{
+ height:100%;
+ position:absolute;
+ left:0px;
+ top:0px;
+}

@@ -1,0 +1,33 @@
+<script>
+$(document).ready( function() {
+	currentSlide = 0;
+	var slideTime = <%= @slide_duration %>;
+	var messages = [ <%@messages.each do |message|%>"<%= message%>", <%end%> ];
+	quoteText = document.getElementById('quoteText');
+	quoteText.innerHTML = messages[currentSlide];
+	currentSlide = 1
+	var timer = setTimeout(function(){nextSlide(messages);},slideTime);
+});
+
+function nextSlide( messages ){
+	$('.cycle-slideshow').cycle('next');
+	quoteText = document.getElementById('quoteText');
+	quoteText.innerHTML = messages[currentSlide];
+	currentSlide+=1;
+	if(currentSlide < messages.length){
+		setTimeout(function(){nextSlide(messages);},<%=@slide_duration%>);
+	}
+}
+</script>
+
+<div class="cycle-slideshow" 
+	data-cycle-fx="scrollHorz" 
+	data-cycle-timeout="0"
+    >
+    <img src="http://malsup.github.com/images/p1.jpg">
+    <img src="http://malsup.github.com/images/p2.jpg">
+    <img src="http://malsup.github.com/images/p3.jpg">
+    <img src="http://malsup.github.com/images/p4.jpg">
+</div>
+
+<h1 id="quoteText"></h1>

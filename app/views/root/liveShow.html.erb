@@ -1,0 +1,47 @@
+<script>
+var currentMessage = "TXT ME";
+var lastID = -1
+var image_path = "NONE"
+var old_image_path = "NONE"
+var live = false
+$(document).ready( function() {
+	document.getElementById("notLiveImg").style.visibility = "hidden";
+	pollForMessage();
+});
+
+function pollForMessage(){
+	$.getScript("/root/getCurrentMessage.js?old_id="+lastID);
+	if(live){
+		document.getElementById("notLiveImg").style.visibility = "hidden";
+		document.getElementById("quoteText").style.visibility = "visible";
+		document.getElementById("slideshow").style.visibility = "visible";
+		if(image_path != old_image_path){
+			var newSlide = '<img src="/slides/'+image_path+'">';
+			$('.cycle-slideshow').cycle('add', newSlide);
+			old_image_path = image_path
+			$('.cycle-slideshow').cycle('next');
+		}	
+		quoteText = document.getElementById('quoteText');
+		quoteText.innerHTML = currentMessage;
+	}
+	else{
+		document.getElementById("notLiveImg").style.visibility = "visible";
+		document.getElementById("quoteText").style.visibility = "hidden";
+		document.getElementById("slideshow").style.visibility = "hidden";	
+	}
+	setTimeout(pollForMessage,<%=@poll_duration%>);
+}
+</script>
+
+<div class="cycle-slideshow" 
+	data-cycle-fx="scrollHorz" 
+	data-cycle-timeout="0"
+	id="slideshow"
+    >
+</div>
+
+
+<img id="notLiveImg" src="/slides/offline.png" />
+
+<textarea readonly id="quoteText" rows="6" cols="30">
+</textarea>
