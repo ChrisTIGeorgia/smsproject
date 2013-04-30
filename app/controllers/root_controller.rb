@@ -10,25 +10,7 @@ class RootController < ApplicationController
 	end
 	
 	def addMessage
-		newUser = User.new
-		newUser.phone_number = "5995005"
-		newUser.num_messages = 0
-		newUser.save
-		newUser.phone_number += newUser.id.to_s
-		newUser.save
-		
-		newMessage = Message.new
-		newMessage.save
-		newMessage.user_id = newUser.id
-		newMessage.body = "THIS IS MESSAGE NUMBER: "
-		newMessage.time_recieved = DateTime.now
-		newMessage.save
-		newMessage.body += newMessage.id.to_s
-		newMessage.save
-		
-		newUser.num_messages += 1
-		newUser.save
-		redirect_to :action=>'index'
+
 	end
 	
 	def getActiveSlide
@@ -62,13 +44,20 @@ class RootController < ApplicationController
 		return timePassed
 	end
 	
-	def submitMessage
-		slideInfo = getActiveSlide()
-		currentSlide = slideInfo[0]
+	def submitMessage	
+		#get dara
+		number = params[:from]
+		message = params[:message]
+		secret = params[:phone_number]
+		success = "false"
+		
+		puts secret
+		if secret == "555666777"	
+			puts "INS"
+			slideInfo = getActiveSlide()
+			currentSlide = slideInfo[0]
 			if currentSlide
 				currentShow = Show.last
-				number = params["phone_number"]
-				message = params["message"]
 				
 				currentUser = User.where(:phone_number => number).first
 				if not currentUser
@@ -81,25 +70,18 @@ class RootController < ApplicationController
 				currentUser.num_messages += 1
 				currentUser.save
 				if message
-					puts "WE HAVE MESSAGE"
 					newMessage = Message.new
 					newMessage.user_id = currentUser.id
 					newMessage.body = message
 					newMessage.time_recieved = DateTime.now
 					newMessage.slide_id = currentShow.slides[currentSlide].id
 					#check for recent messages
-					puts "seconds per slide"
 					secPerSlide = getSecondsPerSlide(currentShow)
-					puts secPerSlide
 					minSeperation = 2.0/secPerSlide
 					currentDuration = slideInfo[1]
-					puts "minSep: " + minSeperation.to_s
-					puts "duration: " + currentDuration.to_s
 					safeTime = currentDuration - minSeperation
-					puts "safeTime: " + safeTime.to_s
 					recentMessage = Message.where("slide_id = ? AND slide_time > ?",newMessage.slide_id,safeTime).last
 					if recentMessage
-						puts "RECENT"
 						newTime = recentMessage.slide_time + minSeperation
 						if (secPerSlide - (1.0-newTime)*secPerSlide) > 1.0
 							newMessage.slide_time = newTime
@@ -107,19 +89,17 @@ class RootController < ApplicationController
 							#too late ignore this time but store incase we want it later
 							newMessage.slide_time = 1.1
 						end
-						puts "TRIED TIME"
-						puts slideInfo[1]
-						puts "NEW TIME"
-						puts newMessage.slide_time
 					else
-						puts "SHOW NOW"
 						newMessage.slide_time = slideInfo[1]
 					end
-					puts "SAVING MESSAGE"
 					newMessage.save
 				end
 			end
-		redirect_to :action => :admin
+			success = "true"
+		end
+			
+		jsonResponse = '{ "playload": { "success": "'+success+'" } }'
+		render :json => jsonResponse
 	end
 	
 	def deleteAll

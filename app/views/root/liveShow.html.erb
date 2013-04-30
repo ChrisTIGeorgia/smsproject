@@ -4,8 +4,8 @@ var lastID = -1
 var image_path = "NONE"
 var old_image_path = "NONE"
 var live = false
+
 $(document).ready( function() {
-	document.getElementById("notLiveImg").style.visibility = "hidden";
 	pollForMessage();
 });
 
@@ -33,6 +33,10 @@ function pollForMessage(){
 }
 </script>
 
+
+ <h1 id="banner">Sabaaso</h1>
+
+
 <div class="cycle-slideshow" 
 	data-cycle-fx="scrollHorz" 
 	data-cycle-timeout="0"
@@ -40,8 +44,10 @@ function pollForMessage(){
     >
 </div>
 
-
-<img id="notLiveImg" src="/slides/offline.png" />
+<div>
+	<img id="notLiveImg" src="/slides/offline.png" />
+</div>
 
 <textarea readonly id="quoteText" rows="6" cols="30">
 </textarea>
+

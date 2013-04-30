@@ -17,9 +17,25 @@ outline:none;
 resize:none;
 }
 
+img
+{
+ z-index : -1;
+}
+
 #notLiveImg
 {
  height:100%;
+ position:absolute;
+ left:0px;
+ top:0px;
+}
+
+#banner
+{
+ color:white;
+ z-index: 700;
+ font-family:"Times New Roman";
+ font-size:45px;
  position:absolute;
  left:0px;
  top:0px;
