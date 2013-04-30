@@ -22,6 +22,17 @@ img
  z-index : -1;
 }
 
+#userText {
+	position:absolute;
+	left:525px;
+	top:160px;
+	z-index: 700;
+	font-family:"Times New Roman";
+	font-size:23px;
+    width: 300px;
+    word-wrap: break-word;
+}
+
 #notLiveImg
 {
  height:100%;

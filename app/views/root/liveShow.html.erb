@@ -13,7 +13,7 @@ function pollForMessage(){
 	$.getScript("/root/getCurrentMessage.js?old_id="+lastID);
 	if(live){
 		document.getElementById("notLiveImg").style.visibility = "hidden";
-		document.getElementById("quoteText").style.visibility = "visible";
+		document.getElementById("userText").style.visibility = "visible";
 		document.getElementById("slideshow").style.visibility = "visible";
 		if(image_path != old_image_path){
 			var newSlide = '<img src="/slides/'+image_path+'">';
@@ -21,12 +21,12 @@ function pollForMessage(){
 			old_image_path = image_path
 			$('.cycle-slideshow').cycle('next');
 		}	
-		quoteText = document.getElementById('quoteText');
+		quoteText = document.getElementById('userText');
 		quoteText.innerHTML = currentMessage;
 	}
 	else{
 		document.getElementById("notLiveImg").style.visibility = "visible";
-		document.getElementById("quoteText").style.visibility = "hidden";
+		document.getElementById("userText").style.visibility = "hidden";
 		document.getElementById("slideshow").style.visibility = "hidden";	
 	}
 	setTimeout(pollForMessage,<%=@poll_duration%>);
@@ -48,6 +48,8 @@ function pollForMessage(){
 	<img id="notLiveImg" src="/slides/offline.png" />
 </div>
 
-<textarea readonly id="quoteText" rows="6" cols="30">
-</textarea>
+
+
+<div id="userText">
+</div>
 
