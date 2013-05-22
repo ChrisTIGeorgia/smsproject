@@ -56,7 +56,6 @@ class RootController < ApplicationController
 		success = "false"
 		
 		if secret == "555666777"	
-			puts "INS"
 			slideInfo = getActiveSlide()
 			currentSlide = slideInfo[0]
 			if currentSlide
@@ -108,6 +107,7 @@ class RootController < ApplicationController
 	def deleteAll
 		User.destroy_all
 		Message.destroy_all
+		Show.destroy_all
 		redirect_to :action=> :index
 	end
 	
@@ -145,10 +145,11 @@ class RootController < ApplicationController
 		if minutes < 1
 			minutes = 30
 		end
-		setupShow(minutes)
+		theShow = setupShow(minutes)
 		theShow.start_time = DateTime.now
 		theShow.is_active = true
 		theShow.save
+		@@slideArray = randomizeSlides()
 		redirect_to :action => :admin
 	end
 	
@@ -171,15 +172,14 @@ class RootController < ApplicationController
 	end
 	
 	def getCurrentMessage
-		slideInfo = getActiveSlide()
-		currentSlideIndex = slideInfo[0]
-		currentSlideProgress = slideInfo[1]
-		if currentSlideIndex
+		slideInfo = getActiveSlide()	
+		if slideInfo[0]
 			currentShow = Show.last
-			@live = true
-			slide = currentShow.slides[currentSlideIndex]
-			@current_slide_path = slide.image_path
-			latestMesssage = Message.where("slide_id = ? AND slide_time <= ?",slide.id,currentSlideProgress).order("slide_time DESC").first
+      currentSlide = Slide.find(slideInfo[0])
+		  currentSlideProgress = slideInfo[1]
+			@live = true	
+			@current_slide_path = currentSlide.image_path
+			latestMesssage = Message.where("slide_id = ? AND slide_time <= ?",currentSlide.id,currentSlideProgress).order("slide_time DESC").first
 			@message = latestMesssage
 		else
 			@live = false

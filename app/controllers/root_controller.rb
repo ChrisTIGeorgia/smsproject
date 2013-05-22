@@ -14,26 +14,40 @@ class RootController < ApplicationController
 	end
 	
 	def addMessage
-
 	end
+
+  def randomizeSlides
+		currentShow = Show.last
+		slides = currentShow.slides
+    randomArray = []
+    slides.each do |slide|
+      randomArray.push(slide.id)
+    end
+    randomArray = randomArray.shuffle()
+    puts randomArray
+    return randomArray
+  end
 	
 	def getActiveSlide
 		currentShow = Show.last
 		slideIndex = nil
 		slideDuration = nil
-		if currentShow.is_active
+		if currentShow and currentShow.is_active
 			timePassed = getCurrentShowDuration(currentShow)
 			if timePassed/60 > currentShow.show_duration_minutes
 				currentShow.is_active = false
 				currentShow.save
+        return [nil,nil]
 			else
 				secondsPerSlide = getSecondsPerSlide(currentShow)
 				slideTime = timePassed/secondsPerSlide
 				slideIndex = slideTime.to_i
 				slideDuration = slideTime%1
 			end
-		end
-		return [slideIndex, slideDuration]
+		else
+      return [nil,nil]
+    end
+		return [ @@slideArray[slideIndex], slideDuration]
 	end
 	
 	def getSecondsPerSlide( show )
@@ -48,21 +62,21 @@ class RootController < ApplicationController
 		return timePassed
 	end
 	
-	def submitMessage	
-		#get dara
+def submitMessage	
+		#get data
 		number = params[:from]
 		message = params[:message]
 		secret = params[:phone_number]
 		success = "false"
 		
 		if secret == "555666777"	
-			puts "INS"
 			slideInfo = getActiveSlide()
-			currentSlide = slideInfo[0]
+			currentSlide = Slide.find(slideInfo[0])
 			if currentSlide
 				currentShow = Show.last
 				
 				currentUser = User.where(:phone_number => number).first
+        puts currentUser
 				if not currentUser
 					currentUser = User.new
 					currentUser.phone_number = number
@@ -77,7 +91,7 @@ class RootController < ApplicationController
 					newMessage.user_id = currentUser.id
 					newMessage.body = message
 					newMessage.time_recieved = DateTime.now
-					newMessage.slide_id = currentShow.slides[currentSlide].id
+					newMessage.slide_id = currentSlide.id
 					#check for recent messages
 					secPerSlide = getSecondsPerSlide(currentShow)
 					minSeperation = 2.0/secPerSlide
@@ -108,6 +122,7 @@ class RootController < ApplicationController
 	def deleteAll
 		User.destroy_all
 		Message.destroy_all
+		Show.destroy_all
 		redirect_to :action=> :index
 	end
 	
@@ -149,6 +164,7 @@ class RootController < ApplicationController
 		theShow.start_time = DateTime.now
 		theShow.is_active = true
 		theShow.save
+		@@slideArray = randomizeSlides()
 		redirect_to :action => :admin
 	end
 	
@@ -171,15 +187,14 @@ class RootController < ApplicationController
 	end
 	
 	def getCurrentMessage
-		slideInfo = getActiveSlide()
-		currentSlideIndex = slideInfo[0]
-		currentSlideProgress = slideInfo[1]
-		if currentSlideIndex
+		slideInfo = getActiveSlide()	
+		if slideInfo[0]
 			currentShow = Show.last
-			@live = true
-			slide = currentShow.slides[currentSlideIndex]
-			@current_slide_path = slide.image_path
-			latestMesssage = Message.where("slide_id = ? AND slide_time <= ?",slide.id,currentSlideProgress).order("slide_time DESC").first
+      currentSlide = Slide.find(slideInfo[0])
+		  currentSlideProgress = slideInfo[1]
+			@live = true	
+			@current_slide_path = currentSlide.image_path
+			latestMesssage = Message.where("slide_id = ? AND slide_time <= ?",currentSlide.id,currentSlideProgress).order("slide_time DESC").first
 			@message = latestMesssage
 		else
 			@live = false
