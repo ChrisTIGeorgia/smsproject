@@ -15,6 +15,5 @@ Sabaaso
 	<%= submit_tag("START SHOW") %>
   <%= label_tag(:mins, "Show Duration (minutes)") %>
   <%= text_field_tag(:mins) %>
-<% end %>
 
 <%= button_to "STOP SHOW", {:action => "stopShow"}%>

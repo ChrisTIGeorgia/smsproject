@@ -1,5 +1,5 @@
 <script>
-var currentMessage = "";
+var currentMessage = "TXT ME";
 var lastID = -1
 var image_path = "NONE"
 var old_image_path = "NONE"

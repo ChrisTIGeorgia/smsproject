@@ -60,5 +60,6 @@ img
  font-size:45px;
  left:200px;
  position:absolute;
+ left:0px;
  top:0px;
 }

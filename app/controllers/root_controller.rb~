@@ -145,7 +145,7 @@ class RootController < ApplicationController
 		if minutes < 1
 			minutes = 30
 		end
-		theShow = setupShow(minutes)
+		setupShow(minutes)
 		theShow.start_time = DateTime.now
 		theShow.is_active = true
 		theShow.save
