@@ -94,7 +94,7 @@ def submitMessage
 					newMessage.slide_id = currentSlide.id
 					#check for recent messages
 					secPerSlide = getSecondsPerSlide(currentShow)
-					minSeperation = 2.0/secPerSlide
+					minSeperation = 10.0/secPerSlide
 					currentDuration = slideInfo[1]
 					safeTime = currentDuration - minSeperation
 					recentMessage = Message.where("slide_id = ? AND slide_time > ?",newMessage.slide_id,safeTime).last
@@ -196,6 +196,8 @@ def submitMessage
 			@current_slide_path = currentSlide.image_path
 			latestMesssage = Message.where("slide_id = ? AND slide_time <= ?",currentSlide.id,currentSlideProgress).order("slide_time DESC").first
 			@message = latestMesssage
+			slideDuration = getSecondsPerSlide(currentShow)
+			@timeLeft = (slideDuration - slideDuration*currentSlideProgress).ceil
 		else
 			@live = false
 		end

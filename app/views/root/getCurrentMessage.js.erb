@@ -3,4 +3,5 @@ live = <%= @live%>
 	currentMessage = "<%if @message%> <%= @message.body%> <%else%><%end%>";
 	lastID = <%if @message%><%=@message.id%><%else%>-1<%end%>;
 	var image_path = "<%=@current_slide_path%>";
+	var countDown = <%if @timeLeft%><%=@timeLeft%><%else%>-1<%end%>;
 <%end%>

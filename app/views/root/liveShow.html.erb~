@@ -1,8 +1,9 @@
 <script>
-var currentMessage = "TXT ME";
+var currentMessage = "";
 var lastID = -1
 var image_path = "NONE"
 var old_image_path = "NONE"
+var countDown = -1
 var live = false
 
 $(document).ready( function() {
@@ -23,6 +24,14 @@ function pollForMessage(){
 		}	
 		quoteText = document.getElementById('userText');
 		quoteText.innerHTML = currentMessage;
+
+		if(countDown!=-1){
+			countDownDiv = document.getElementById('countDown');
+			var date = new Date(null);
+			date.setSeconds(countDown);
+			var time = date.toTimeString().substr(3, 12);
+		  countDownDiv.innerHTML = time;
+		}
 	}
 	else{
 		document.getElementById("notLiveImg").style.visibility = "visible";
@@ -49,8 +58,9 @@ function pollForMessage(){
 	<img id="notLiveImg" src="/slides/offline.png" />
 </div>
 
-
-
 <div id="userText">
+</div>
+
+<div id="countDown">
 </div>
 

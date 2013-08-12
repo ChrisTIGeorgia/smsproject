@@ -60,6 +60,19 @@ img
  font-size:45px;
  left:200px;
  position:absolute;
- left:0px;
  top:0px;
+}
+
+
+#countDown
+{
+ color:black;
+ text-align:center;
+ z-index: 700;
+ font-family:"Hellenic";
+ font-size:45px;
+ width: 200px;
+ position:absolute;
+ top:600px;
+ left: 550px;
 }
